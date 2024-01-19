@@ -42,7 +42,28 @@ public class Typen {
         //Boolean true, da vor dem 'oder' das true steht ist das auf der rechten seite egal
         System.out.println(true || 18 < 2 + 3 * 5 && 1 + 3 < 2);
 
-        
+
+
+
+        System.out.println(product(3, 20));
+        System.out.println(squaresum(3, 20));
+        output("Hello World!");
+        warning();
+    }
+
+    private static int product(int x, int y){
+        return x * y;
     }
     
+    private static int squaresum(int x, int y){
+        return (x * x) + (y * y);
+    }
+
+    private static void output(String ausG){
+        System.out.println(ausG + "\n");
+    }
+
+    private static void warning(){
+        System.out.println("WARNUNG\n");
+    }
 }

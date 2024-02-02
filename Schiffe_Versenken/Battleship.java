@@ -82,6 +82,11 @@ public class Battleship {
         String age2 = "[1-9][0-9]*[mwd]";
 
         String test = "Toooor!";
+        System.out.println(test.matches(doubleChar));
         System.out.println(test.matches(tor));
+        System.out.println(test.matches(variableValid));
+        System.out.println(test.matches(variableValid2));
+        System.out.println(test.matches(age));
+        System.out.println(test.matches(age2));
     }
 }

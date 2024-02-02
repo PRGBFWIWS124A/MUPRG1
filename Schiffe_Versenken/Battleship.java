@@ -5,6 +5,11 @@ public class Battleship {
     static final int SIZE = 10;
     static final String ENTER_SHIP_COORDINATE_PROMPT = "Geben Sie die %skoordinaten für ein Schiff der Länge %d ein: ";
 
+    //Merhere static in richtiger und wichtiger reihenfolge
+    /*static {
+        SIZE = 10;
+    }*/
+
     public static void main(String[] args) {
         while (true) {
             String test = getRandomCoordinate().toString();

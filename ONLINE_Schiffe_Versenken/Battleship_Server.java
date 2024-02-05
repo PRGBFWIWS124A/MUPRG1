@@ -1,3 +1,4 @@
+import basis.*;
 public class Battleship_Server extends Server{
 
     public static void main(String[] args) {
@@ -11,7 +12,7 @@ public class Battleship_Server extends Server{
     
     public void processNewConnection(String pClientIP, int pClientPort){
         send(pClientIP, pClientPort, "HELLO " + pClientIP + " " + pClientPort);
-        
+        new Fenster("Hello World!", 300, 300);
     }
 
     public void processMessage(String pClientIP, int pClientPort, String pMessage){

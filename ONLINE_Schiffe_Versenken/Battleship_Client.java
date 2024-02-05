@@ -9,7 +9,6 @@ public class Battleship_Client extends Client{
     }
 
     public void processMessage(String pMessage){
-        System.err.println(pMessage);
         
     }
 }

@@ -56,5 +56,6 @@ public class Battleship_Server extends Server {
     @Override
     public void send(String pClientIP, int pClientPort, String pMessage){
         console("Send: " + pMessage + " to " + pClientIP + " " + pClientPort, 1);
+        super.send(pClientIP, pClientPort, pMessage);
     }
 }

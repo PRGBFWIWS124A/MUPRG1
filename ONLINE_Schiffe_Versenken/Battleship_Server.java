@@ -28,6 +28,7 @@ public class Battleship_Server extends Server {
         }
 
         Fenster main_win = new Fenster(server_introString, MAIN_WIN_SIZE_X, MAIN_WIN_SIZE_Y);
+        main_win.setzePosition(20, 20);
         
         console = new TextBereich(10, 10, MAIN_WIN_SIZE_X - 20, MAIN_WIN_SIZE_Y - 20);
         console(server_introString, 2);

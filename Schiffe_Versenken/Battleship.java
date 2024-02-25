@@ -182,19 +182,19 @@ public class Battleship {
     static void showField(final Field field, final boolean showShips) {
 
         switch (field) {
-            case Field.SHIP:
+            case SHIP:
                 System.out.print(showShips == true ? "O" : " ");
                 break;
 
-            case Field.FREE:
+            case FREE:
                 System.out.print(" ");
                 break;
 
-            case Field.WATER_HIT:
+            case WATER_HIT:
                 System.out.print("X");
                 break;
 
-            case Field.SHIP_HIT:
+            case SHIP_HIT:
                 System.out.print("*");
                 break;
         }
@@ -202,19 +202,19 @@ public class Battleship {
 
     static void shot(final Coordinate shot, final Field[][] field) {
         switch (field[shot.row()][shot.column()]) {
-            case Field.SHIP:
+            case SHIP:
                 field[shot.row()][shot.column()] = Field.SHIP_HIT;
                 break;
 
-            case Field.FREE:
+            case FREE:
                 field[shot.row()][shot.column()] = Field.WATER_HIT;
                 break;
 
-            case Field.WATER_HIT:
+            case WATER_HIT:
                 // NICHTS (ICH WEISS DIESER CASE IST UNNOETIG)
                 break;
 
-            case Field.SHIP_HIT:
+            case SHIP_HIT:
                 // NICHTS (ICH WEISS DIESER CASE IST UNNOETIG)
                 break;
         }

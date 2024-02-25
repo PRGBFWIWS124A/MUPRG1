@@ -35,8 +35,8 @@ public class Battleship_Client extends Client{
         }
 
         //Create GUI
-        String heading = client_introString + " connecting to IP: - " + SERVER_IP + " - and Port: - " + SERVER_PORT;
-        Fenster main_win = new Fenster(heading, MAIN_WIN_SIZE_X, MAIN_WIN_SIZE_Y);
+        String heading = client_introString + " connecting to IP: - " + SERVER_IP + " - and Port: - " + SERVER_PORT + " -";
+        main_win = new Fenster(heading, MAIN_WIN_SIZE_X, MAIN_WIN_SIZE_Y);
         main_win.setzePosition(MAIN_WIN_POS_X, MAIN_WIN_POS_Y);
     }
 
@@ -44,11 +44,14 @@ public class Battleship_Client extends Client{
         System.out.println("Received: " + pMessage);
 
         String command = pMessage.substring(0,7);
+        String content = pMessage.substring(7);
         
         switch(command){
             case "ARRIVED":
-            String heading = client_introString + " connected to IP: - " + SERVER_IP + " - and Port: - " + SERVER_PORT;
+                String heading = client_introString + " connected to IP: - " + SERVER_IP + " - and Port: - " + SERVER_PORT + " -";
                 main_win.setzeTitel(heading);
+
+                
             break;
         }
     }

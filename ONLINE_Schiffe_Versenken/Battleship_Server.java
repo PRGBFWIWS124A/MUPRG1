@@ -43,11 +43,21 @@ public class Battleship_Server extends Server {
     }
 
     public void processNewConnection(String pClientIP, int pClientPort) {
+        try{Thread.sleep(2000);}catch(Exception e){}
+
         player_List.add(new Player(pClientIP, pClientPort));
         send(pClientIP, pClientPort, "ARRIVED");
     }
 
     public void processMessage(String pClientIP, int pClientPort, String pMessage) {
+        String command = pMessage.substring(0,7);
+        String content = pMessage.substring(7);
+        
+        switch(command){
+            case "MY_NAME":
+                
+            break;
+        }
     }
 
     public void processClosingConnection(String pClientIP, int pClientPort) {

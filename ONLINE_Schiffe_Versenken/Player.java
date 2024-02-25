@@ -1,13 +1,13 @@
 public class Player {
     
-    private String ip, name;
-    private int port, score;
+    private String ip;
+    private String name = "";
+    private int port;
+    private int score = 0;
 
-    public Player(String ip, int port, String name){
+    public Player(String ip, int port){
         this.ip = ip;
         this.port = port;
-        this.name = name;
-        score = 0;
     }
 
     public String getIP(){return ip;}

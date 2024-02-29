@@ -1,5 +1,7 @@
+import java.util.UUID;
+
 public class Player {
-    
+    private final UUID uuid = UUID.randomUUID();
     private String ip;
     private String name = "";
     private int port;
@@ -17,6 +19,8 @@ public class Player {
     public String getName(){return name;}
 
     public int getScore(){return score;}
+
+    public String getUUID(){return uuid.toString();}
 
 
     public void setIP(String ip){this.ip = ip;}

@@ -55,12 +55,14 @@ public class Battleship_Server extends Server {
         
         switch(command){
             case "MY_NAME":
-                
+                searchPlayer(pClientIP, pClientPort).setName(content);
+                send(pClientIP, pClientPort, "NAME_OK");
             break;
         }
     }
 
     public void processClosingConnection(String pClientIP, int pClientPort) {
+        player_List.remove(searchPlayer(pClientIP, pClientPort));
     }
 
     private void console(String message, int line_breaks){
@@ -68,6 +70,15 @@ public class Battleship_Server extends Server {
         for(int i = 0; i < line_breaks; i++){
             console.setzeInNeueZeile("");
         }
+    }
+
+    private Player searchPlayer(String pClientIP, int pClientPort){
+        for(int i = 0; i < player_List.size(); i++){
+            if(pClientIP.equals(player_List.get(i).getIP()) && pClientPort == player_List.get(i).getPort()){
+                return player_List.get(i);
+            }
+        }
+        return null;
     }
 
     @Override

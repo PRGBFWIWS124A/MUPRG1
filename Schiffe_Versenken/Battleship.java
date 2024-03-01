@@ -228,6 +228,136 @@ public class Battleship {
         }
     }
 
+    static void showRow(final int row, final Field[][] ownField, final Field[][] otherField) {
+        showRowNumber(row);
+        System.out.print(" |");
+        for (int i = 0; i < SIZE; i++) {
+            showField(ownField[row][i], true);
+            System.out.print("|");
+        }
+        System.out.print("   ");
+        showRowNumber(row);
+        System.out.print(" |");
+
+        for (int j = 0; j < SIZE; j++) {
+            showField(otherField[row][j], false);
+            System.out.print("|");
+        }
+
+        System.out.println();
+    }
+
+    static void showFields(final Field[][] ownField, final Field[][] otherField) {
+        System.out.print("    A B C D E F G H I J        A B C D E F G H J");
+        showSeperatorLine();
+        for (int i = 0; i < SIZE; i++) {
+            showRow(i, ownField, otherField);
+            showSeperatorLine();
+        }
+        System.out.println();
+    }
+
+    static boolean shipSunk(final Coordinate shot, final Field[][] field) {
+        int row = shot.row();
+        int column = shot.column();
+        while (row > 0 && Field.SHIP_HIT == field[row][column]) {
+            row--;
+        }
+        if (Field.SHIP == field[row][column]) {
+            return false;
+        }
+        row = shot.row();
+        column = shot.column();
+        while (row < SIZE - 1 && Field.SHIP_HIT == field[row][column]) {
+            row++;
+        }
+        if (Field.SHIP == field[row][column]) {
+            return false;
+        }
+        row = shot.row();
+        column = shot.column();
+        while (column < SIZE - 1 && Field.SHIP_HIT == field[row][column]) {
+            column++;
+        }
+        if (Field.SHIP == field[row][column]) {
+            return false;
+        }
+        row = shot.row();
+        column = shot.column();
+        while (column > 0 && Field.SHIP_HIT == field[row][column]) {
+            column--;
+        }
+        if (Field.SHIP == field[row][column]) {
+            return false;
+        }
+        return true;
+    }
+
+    static void setAllFree(final Field[][] field) {
+        for (int row = 0; row < SIZE; row++) {
+            for (int column = 0; column < SIZE; column++) {
+                field[row][column] = Field.FREE;
+            }
+        }
+    }
+
+    static int countHits(final Field[][] field) {
+        int res = 0;
+        for (int row = 0; row < SIZE; row++) {
+            for (int column = 0; column < SIZE; column++) {
+                if (field[row][column] == Field.SHIP_HIT) {
+                    res++;
+                }
+            }
+        }
+        return res;
+    }
+
+    static void fillWaterHits(final Coordinate shot, final Field[][] field) {
+        int row = shot.row();
+        int column = shot.column();
+        while (row > 0 && Field.SHIP_HIT == field[row][column]) {
+            row--;
+        }
+        int minRow = row;
+        row = shot.row();
+        column = shot.column();
+        while (row < SIZE - 1 && Field.SHIP_HIT == field[row][column]) {
+            row++;
+        }
+        int maxRow = row;
+        row = shot.row();
+        column = shot.column();
+        while (column < SIZE - 1 && Field.SHIP_HIT == field[row][column]) {
+            column++;
+        }
+        int maxColumn = column;
+        row = shot.row();
+        column = shot.column();
+        while (column > 0 && Field.SHIP_HIT == field[row][column]) {
+            column--;
+        }
+        int minColumn = column;
+        for (row = minRow; row < maxRow; row++) {
+            for (column = minColumn; column < maxColumn; column++) {
+                if (field[row][column] == Field.FREE) {
+                    field[row][column] = Field.WATER_HIT;
+                }
+            }
+        }
+    }
+
+    static boolean noConflict(final Coordinate start, final Coordinate end, final Field[][] field){
+        for(int column = getMinSurroundingColumn(start,end); column <= getMaxSurroundingColumn(start, end); column++){
+            for(int row = getMinSurroundingRow(start,end); row <= getMaxSurroundingRow(start, end); row++){
+                if(field[column][row] != Field.FREE){
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
     // Uebungen
     static int max(final int[] array) {
         int max = 0;

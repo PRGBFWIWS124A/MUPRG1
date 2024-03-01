@@ -50,6 +50,8 @@ public class Battleship_Server extends Server {
     }
 
     public void processMessage(String pClientIP, int pClientPort, String pMessage) {
+        console("Received: " + pMessage + " from " + pClientIP + " " + pClientPort, 1);
+        
         String command = pMessage.substring(0,7);
         String content = pMessage.substring(7);
         

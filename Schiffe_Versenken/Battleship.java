@@ -1,9 +1,15 @@
-import java.util.Random;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.*;
 
 public class Battleship {
 
     static final int SIZE = 10;
     static final String ENTER_SHIP_COORDINATE_PROMPT = "Geben Sie die %skoordinaten für ein Schiff der Länge %d ein: ";
+    static final String ENTER_SHOT_COORDINATE_PROMPT = "Wo soll geschossen werden?";
+    static final BufferedReader READER = new BufferedReader(new InputStreamReader(System.in));
+    static final int ALL_HIT = 14;
 
     // Merhere static in richtiger und wichtiger reihenfolge
     /*
@@ -204,6 +210,7 @@ public class Battleship {
         switch (field[shot.row()][shot.column()]) {
             case SHIP:
                 field[shot.row()][shot.column()] = Field.SHIP_HIT;
+                if(shipSunk(shot, field)) fillWaterHits(shot, field);
                 break;
 
             case FREE:
@@ -347,10 +354,11 @@ public class Battleship {
         }
     }
 
-    static boolean noConflict(final Coordinate start, final Coordinate end, final Field[][] field){
-        for(int column = getMinSurroundingColumn(start,end); column <= getMaxSurroundingColumn(start, end); column++){
-            for(int row = getMinSurroundingRow(start,end); row <= getMaxSurroundingRow(start, end); row++){
-                if(field[column][row] != Field.FREE){
+    static boolean noConflict(final Coordinate start, final Coordinate end, final Field[][] field) {
+        for (int column = getMinSurroundingColumn(start, end); column <= getMaxSurroundingColumn(start,
+                end); column++) {
+            for (int row = getMinSurroundingRow(start, end); row <= getMaxSurroundingRow(start, end); row++) {
+                if (field[column][row] != Field.FREE) {
                     return false;
                 }
             }
@@ -358,8 +366,97 @@ public class Battleship {
         return true;
     }
 
+    static Coordinate readCoordinate(final String prompt) {
+
+        String input = "";
+        while (!isValidCoordinate(input)) {
+            System.out.println(prompt);
+            try {
+                input = Battleship.READER.readLine();
+            } catch (IOException e) {
+            }
+        }
+        return toCoordinate(input);
+    }
+
+    static Coordinate getRandomUnshotCoordinate(final Field[][] field) {
+        int chances = 0;
+        for (int row = 0; row < field.length; row++) {
+            for (int column = 0; column < field[0].length; column++) {
+                if (field[row][column] == Field.FREE || field[row][column] == Field.SHIP) {
+                    chances++;
+                }
+            }
+        }
+
+        int random_Skip = new Random().nextInt(chances);
+        for (int row = 0; row < field.length; row++) {
+            for (int column = 0; column < field[0].length; column++) {
+                if (field[row][column] == Field.FREE || field[row][column] == Field.SHIP) {
+                    random_Skip--;
+                    if (random_Skip < 0)
+                        return new Coordinate(column, row);
+                }
+            }
+        }
+        throw new IllegalStateException();
+    }
+
+    static Coordinate readStartCoordinate(final int length){
+        return readCoordinate(getStartCoordinatePrompt(length));
+    }
+
+    static Coordinate readEndCoordinate(final int length){
+        return readCoordinate(getEndCoordinatePrompt(length));
+    }
+
+    static boolean allHit(final Field[][] field){
+        return countHits(field) == ALL_HIT;
+    }
+
+    static boolean endCondition(final Field[][] ownField, final Field[][] otherField){
+        return allHit(ownField) || allHit(otherField);
+    }
+
+    static boolean validPosition(
+        final Coordinate start,
+        final Coordinate end,
+        final int length,
+        final Field[][] field
+        ){
+        return distance(start, end)  == length -1 && noConflict(start, end, field) && onOneLine(start, end);
+    }
+
+    static void turn(final Field[][] ownField, final Field[][] otherField){
+        showFields(ownField, otherField);
+        shot(readCoordinate(ENTER_SHOT_COORDINATE_PROMPT), otherField);
+        shot(getRandomUnshotCoordinate(ownField), ownField);
+    }
+
+    static void outputWinner(final Field[][] ownField, final Field[][] otherField){
+        showFields(ownField, otherField);
+            if (allHit(otherField)) System.out.println("Du hast gewonnen!");
+            else System.out.println("Der Computer hat gewonnen!"); 
+    }
+
+    static Field[][] iniOtherField(){
+        Field[][] field = new Field[SIZE][SIZE];
+        setAllFree(field);
+
+        for(int ship_size = 5; ship_size >= 2; ship_size--){
+            Coordinate start = getRandomCoordinate();
+            placeShip(start, getRandomCoordinate(start, ship_size), field);
+        }
+
+        return field;
+    }
+
+    
+
     // Uebungen
     static int max(final int[] array) {
+        if (array == null || array.length == 0)
+            throw new IllegalArgumentException("Kein Array vorhanden");
         int max = 0;
         for (int i = 0; i < array.length; i++) {
             max = Math.max(array[i], max);

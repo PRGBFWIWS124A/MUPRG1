@@ -40,7 +40,7 @@ public class Typen {
         System.out.println(((Object)(x != 'x' ? 2f : 1)).getClass().getName());
 
         //Boolean true, da vor dem 'oder' das true steht ist das auf der rechten seite egal
-        System.out.println(true || 18 < 2 + 3 * 5 && 1 + 3 < 2);
+        //System.out.println(true || 18 < 2 + 3 * 5 && 1 + 3 < 2);
 
 
 

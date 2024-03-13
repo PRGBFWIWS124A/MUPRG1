@@ -18,12 +18,23 @@ public class Battleship {
      * }
      */
 
-    public static void main(String[] args) {
-        while (true) {
-            String test = getRandomCoordinate().toString();
-            System.out.println(test);
+    public static void main(final String[] args) {
+        System.out.println();
+        final Field[][] otherField = initOtherField();
+        final Field[][] ownField = initOwnField(otherField);
+
+        for(int i = 0; i < otherField.length; i++){
+            for(int j = 0; j < otherField.length; j++){
+            
+            }
         }
+
+        while (!endCondition(ownField, otherField)) {
+            turn(ownField, otherField);
+        }
+        outputWinner(ownField, otherField);
     }
+    
 
     static int distance(final Coordinate start, final Coordinate end) {
         return Math.abs(((start.column() - end.column()))) + Math.abs((start.row() - end.row()));
@@ -147,7 +158,7 @@ public class Battleship {
         return "5,0";
     }
 
-    static Coordinate getRandomCoordinate(final Coordinate start, final int distance) {
+    static Coordinate getRandomEndCoordinate(final Coordinate start, final int distance) {
         int choices = 0;
         if (start.column() - distance >= 0) {
             choices++;
@@ -189,7 +200,7 @@ public class Battleship {
 
         switch (field) {
             case SHIP:
-                System.out.print(showShips == true ? "O" : " ");
+                System.out.print(showShips ? "O" : " ");
                 break;
 
             case FREE:
@@ -228,9 +239,10 @@ public class Battleship {
     }
 
     static void placeShip(final Coordinate start, final Coordinate end, final Field[][] field) {
-        for (int i = Math.min(start.row(), end.row()); i < Math.max(start.row(), end.row()); i++) {
-            for (int j = Math.min(start.column(), end.column()); i < Math.max(start.column(), end.column()); i++) {
+        for (int i = Math.min(start.row(), end.row()); i <= Math.max(start.row(), end.row()); i++) {
+            for (int j = Math.min(start.column(), end.column()); j <= Math.max(start.column(), end.column()); j++) {
                 field[i][j] = Field.SHIP;
+                System.out.println(field[i][j]);
             }
         }
     }
@@ -255,7 +267,7 @@ public class Battleship {
     }
 
     static void showFields(final Field[][] ownField, final Field[][] otherField) {
-        System.out.print("    A B C D E F G H I J        A B C D E F G H J");
+        System.out.println("    A B C D E F G H I J        A B C D E F G H I J");
         showSeperatorLine();
         for (int i = 0; i < SIZE; i++) {
             showRow(i, ownField, otherField);
@@ -439,19 +451,38 @@ public class Battleship {
             else System.out.println("Der Computer hat gewonnen!"); 
     }
 
-    static Field[][] iniOtherField(){
-        Field[][] field = new Field[SIZE][SIZE];
-        setAllFree(field);
-
-        for(int ship_size = 5; ship_size >= 2; ship_size--){
+    static Field[][] initOtherField() {
+        Field[][] otherField = new Field[SIZE][SIZE];
+        setAllFree(otherField);
+        for (int length = 5; length > 1; length--) {
             Coordinate start = getRandomCoordinate();
-            placeShip(start, getRandomCoordinate(start, ship_size), field);
+            Coordinate end = getRandomEndCoordinate(start, length - 1);
+            if (validPosition(start, end, length, otherField)) {
+                placeShip(start, end, otherField);
+            } else {
+                length++;
+            }
         }
-
-        return field;
+        return otherField;
     }
 
-    
+    static Field[][] initOwnField(final Field[][] otherField) {
+        final Field[][] ownField = new Field[SIZE][SIZE];
+        setAllFree(ownField);
+        for (int length = 5; length > 1; length--) {
+            showFields(ownField, otherField);
+            final Coordinate start = readStartCoordinate(length);
+            final Coordinate end = readEndCoordinate(length);
+            if (validPosition(start, end, length, ownField)) {
+                placeShip(start, end, ownField);
+            } else {
+                length++;
+            }
+        }
+        return ownField;
+    }
+
+
 
     // Uebungen
     static int max(final int[] array) {
@@ -462,5 +493,10 @@ public class Battleship {
             max = Math.max(array[i], max);
         }
         return max;
+    }
+
+    static int fibonacci(final int number) {
+        if (number < 2) return number;
+        return fibonacci(number - 1) + fibonacci(number - 2);
     }
 }
